@@ -7,8 +7,8 @@ const User = require('./models/User');
 const bcrypt = require('bcrypt');
 require('dotenv').config();
 
-const EMAIL = process.env.EMAIL_USER; 
-const PASSWORD = process.env.EMAIL_PASS; 
+const EMAIL = process.env.EMAIL_USER;
+const PASSWORD = process.env.EMAIL_PASS;
 const transporter = nodemailer.createTransport({
   // service: "Gmail", // Use your email provider
   host: process.env.EMAIL_HOST,
@@ -64,7 +64,7 @@ app.use(express.json());
 
 app.post('/send-otp', async (req, res) => {
   const { email } = req.body;
-  
+
   if (!email) {
     return res.status(400).json({ message: 'Email is required.' });
   }
@@ -156,16 +156,32 @@ app.post('/login', async (req, res) => {
   }
 });
 
+app.delete('/delete-account', async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) return res.status(400).json({ message: 'Email is required' });
+
+  try {
+    const user = await User.findOneAndDelete({ email });
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    res.status(200).json({ message: 'Account deleted successfully' });
+  } catch (err) {
+    console.error('❌ Delete account error:', err);
+    res.status(500).json({ message: 'Server error while deleting account' });
+  }
+});
+
 const PORT = process.env.PORT || 5000;
 
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
-.then(() => {
-  console.log('🟢 MongoDB connected');
-  app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
-})
-.catch(err => {
-  console.error('🔴 MongoDB connection error:', err);
-});
+  .then(() => {
+    console.log('🟢 MongoDB connected');
+    app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
+  })
+  .catch(err => {
+    console.error('🔴 MongoDB connection error:', err);
+  });
