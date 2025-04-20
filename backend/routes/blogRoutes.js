@@ -6,7 +6,7 @@ const User = require('../models/User');
 router.post('/create', async (req, res) => {
   try {
     const { title, keywords, content, email } = req.body;
-
+    // console.log(`title : ${title}\nkeywords : ${keywords}\ncontent : ${content}\nemail : ${email}`);
     // Validate required fields
     if (!title || !keywords || !content || !email) {
       return res.status(400).json({ message: 'All fields are required.' });
