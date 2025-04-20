@@ -1,7 +1,9 @@
+const express = require('express');
+const router = express.Router();
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
-const User = require('./models/User');
 const bcrypt = require('bcrypt');
+const User = require('../models/User');
 
 
 const transporter = nodemailer.createTransport({
@@ -40,7 +42,7 @@ function deleteOtp(email) {
 
 async function sendOtpEmail(email, otp) {
     const info = await transporter.sendMail({
-        from: EMAIL,
+        from: process.env.EMAIL_USER,
         to: email,
         subject: 'Your OTP Code',
         text: `Your OTP code is: ${otp}`,
