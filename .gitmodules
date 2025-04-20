@@ -1,3 +1,6 @@
 [submodule "frontend"]
 	path = frontend
 	url = git@github.com:harsh-choudhary-nature/QuizMaster.git
+[submodule "WittyWhizBackend"]
+	path = WittyWhizBackend
+	url = git@github.com:harsh-choudhary-nature/WittyWhizBackend.git
