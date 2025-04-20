@@ -9,9 +9,9 @@ router.get('/', async (req, res) => {
     const { page = 1, limit = 10 } = req.query;
     try {
         const blogs = await Blog.find()
+            .sort({ createdAt: -1 }) // Sort blogs by creation date (newest first)
             .skip((page - 1) * limit)
-            .limit(Number(limit))
-            .sort({ createdAt: -1 }); // Sort blogs by creation date (newest first)
+            .limit(Number(limit));
 
         const totalBlogs = await Blog.countDocuments(); // Total blog count for pagination
         const totalPages = Math.ceil(totalBlogs / limit); // Calculate total pages
